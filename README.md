@@ -40,6 +40,21 @@ step), na ordem em que aparecem no `index.html`. Isso é suficiente porque
 cada módulo é um objeto global independente (`AppState`, `WordModule`,
 `ExcelModule` etc.) — não há `import`/`export`.
 
+## Publicação no GitHub Pages
+
+Este repositório inclui o workflow `.github/workflows/deploy-pages.yml`, que
+publica automaticamente o site no GitHub Pages quando houver push na branch
+`main` ou `master`.
+
+Para ativar:
+
+1. No GitHub, abra **Settings > Pages**.
+2. Em **Build and deployment**, selecione **Source: GitHub Actions**.
+3. Faça merge desta branch na branch padrão (`main` ou `master`).
+
+Depois do workflow executar, o site ficará disponível na URL de Pages do
+repositório.
+
 ## Sem servidor? Sem problema
 
 Não há backend nem banco de dados: o progresso do usuário é salvo no
