@@ -1,0 +1,81 @@
+  :root {
+    --color-ink-rgb: 28 27 34;
+    --color-paper-rgb: 246 245 239;
+    --color-paperdim-rgb: 237 235 225;
+    --color-line-rgb: 217 214 199;
+    --color-sheet: #FFFEFB;
+    --grid-line: rgb(28 27 34 / 0.045);
+  }
+  html.dark {
+    --color-ink-rgb: 232 230 224;
+    --color-paper-rgb: 21 20 26;
+    --color-paperdim-rgb: 30 29 37;
+    --color-line-rgb: 58 57 70;
+    --color-sheet: #1D1C24;
+    --grid-line: rgb(255 255 255 / 0.05);
+  }
+  body {
+    background-color: rgb(var(--color-paper-rgb));
+    background-image:
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(180deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    transition: background-color .2s ease;
+  }
+  .sheet {
+    background: var(--color-sheet);
+    border: 1.5px solid rgb(var(--color-ink-rgb));
+    box-shadow: 4px 4px 0 rgb(var(--color-ink-rgb) / 0.9);
+  }
+  .sheet-soft {
+    background: var(--color-sheet);
+    border: 1.5px solid rgb(var(--color-line-rgb));
+  }
+  .btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    border: 1.5px solid rgb(var(--color-ink-rgb));
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btn-solid { background: rgb(var(--color-ink-rgb)); color: rgb(var(--color-paper-rgb)); box-shadow: 3px 3px 0 rgb(var(--color-ink-rgb) / 0.35); }
+  .btn-solid:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 rgb(var(--color-ink-rgb) / 0.35); }
+  .btn-solid:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 rgb(var(--color-ink-rgb) / 0.35); }
+  .btn-outline { background: var(--color-sheet); color: rgb(var(--color-ink-rgb)); }
+  .btn-outline:hover { background: rgb(var(--color-paperdim-rgb)); }
+  .ribbon-tab { font-family: 'Space Grotesk', sans-serif; }
+  .task-pill { font-family: 'Space Grotesk', sans-serif; font-weight: 600; }
+  .grid-cell-input { font-family: 'JetBrains Mono', monospace; }
+  .checklist-item { transition: all .15s ease; }
+  .accordion-body { max-height: 0; overflow: hidden; transition: max-height .25s ease; }
+  .accordion-body.open { max-height: 900px; }
+  ::-webkit-scrollbar { height: 8px; width: 8px; }
+  ::-webkit-scrollbar-thumb { background: rgb(var(--color-line-rgb)); border-radius: 4px; }
+  .theme-toggle-track { background: rgb(var(--color-paperdim-rgb)); border: 1.5px solid rgb(var(--color-ink-rgb)); }
+  .theme-toggle-knob { background: rgb(var(--color-ink-rgb)); transition: transform .18s ease; }
+  html.dark .theme-toggle-knob { transform: translateX(16px); }
+  .editor-paper {
+    background: #FFFEFB;
+    border: 1.5px solid #1C1B22;
+    color: #1C1B22;
+    font-family: 'Public Sans', sans-serif;
+  }
+  .editor-paper h1 { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; font-weight: 700; margin-bottom: .5rem; }
+  .editor-paper h2 { font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: .4rem; }
+  .editor-paper p { margin-bottom: .6rem; line-height: 1.6; }
+  .editor-paper ul { list-style: disc; padding-left: 1.4rem; margin-bottom: .6rem; }
+  .editor-paper table { width: 100%; border-collapse: collapse; margin: .6rem 0; }
+  .editor-paper table td, .editor-paper table th { border: 1px solid #94a3b8; padding: 6px; font-size: .85rem; }
+  .slide-anim-in { animation: slideReveal .5s ease both; }
+  @keyframes slideReveal { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .stage-fade { animation: fadeSwap .3s ease; }
+  .stage-slide { animation: slideSwap .35s ease; }
+  @keyframes fadeSwap { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideSwap { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: translateX(0); } }
+  .nav-link.active { background: rgb(var(--color-ink-rgb)); color: rgb(var(--color-paper-rgb)); }
+  /* Elementos criados via JS (nav, pílulas de exercício, miniaturas de slide) não podem depender
+     do escaneamento dinâmico do Tailwind via CDN para gerar suas classes hover: — por isso essas
+     regras vivem aqui, num arquivo estático, com garantia de que sempre serão aplicadas. */
+  .nav-link:not(.active):hover { background: rgb(var(--color-paperdim-rgb)); }
+  .task-pill.pill-idle:hover { color: rgb(var(--color-ink-rgb)); }
+  .thumb-idle:hover { background: rgb(var(--color-paperdim-rgb)); }
+  #glossary-modal { backdrop-filter: blur(2px); }
