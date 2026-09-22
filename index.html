@@ -52,8 +52,8 @@
     </div>
     <div class="flex items-center gap-2 text-xs font-mono">
       <span id="header-xp-mobile" class="px-2 py-1 rounded bg-brand-soft text-brand-dark font-bold">0 XP</span>
-      <button onclick="ThemeManager.toggle()" class="w-8 h-8 rounded-md btn btn-outline flex items-center justify-center" aria-label="Alternar modo escuro"><i id="theme-icon-mobile" class="fa-solid fa-moon text-xs"></i></button>
-      <button onclick="Glossary.open()" class="w-8 h-8 rounded-md btn btn-outline flex items-center justify-center" aria-label="Abrir glossário de termos"><i class="fa-solid fa-book text-xs"></i></button>
+      <button onclick="ThemeManager.toggle()" class="w-8 h-8 rounded-md btn btn-outline flex items-center justify-center" aria-label="Alternar modo escuro" title="Alternar modo escuro"><i id="theme-icon-mobile" class="fa-solid fa-moon text-xs"></i></button>
+      <button onclick="Glossary.open()" class="w-8 h-8 rounded-md btn btn-outline flex items-center justify-center" aria-label="Abrir glossário de termos" title="Abrir glossário de termos"><i class="fa-solid fa-book text-xs"></i></button>
     </div>
   </div>
   <nav id="mobile-nav" class="flex gap-1.5 overflow-x-auto px-4 pb-3 text-xs"></nav>
@@ -280,19 +280,19 @@
           <p class="text-[11px] text-ink/40 hidden sm:block">Atalhos: <kbd class="font-mono">Ctrl+N</kbd> negrito &middot; <kbd class="font-mono">Ctrl+I</kbd> itálico &middot; <kbd class="font-mono">Ctrl+J</kbd> justificar &middot; <kbd class="font-mono">Ctrl+F</kbd> localizar</p>
         </div>
         <div class="flex flex-wrap gap-1.5 pb-3 border-b border-line">
-          <button onclick="WordModule.execCmd('bold')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Negrito (Ctrl+N)"><i class="fa-solid fa-bold"></i></button>
-          <button onclick="WordModule.execCmd('italic')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Itálico (Ctrl+I)"><i class="fa-solid fa-italic"></i></button>
-          <button onclick="WordModule.execCmd('underline')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Sublinhado (Ctrl+S)"><i class="fa-solid fa-underline"></i></button>
-          <button onclick="WordModule.execCmd('justifyLeft')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Alinhar à esquerda (Ctrl+Q)"><i class="fa-solid fa-align-left"></i></button>
-          <button onclick="WordModule.execCmd('justifyCenter')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Centralizar (Ctrl+E)"><i class="fa-solid fa-align-center"></i></button>
-          <button onclick="WordModule.execCmd('justifyFull')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Justificar (Ctrl+J)"><i class="fa-solid fa-align-justify"></i></button>
-          <button onclick="WordModule.execCmd('formatBlock','H1')" class="btn btn-outline rounded-md h-9 px-2 text-xs font-bold">H1</button>
-          <button onclick="WordModule.execCmd('formatBlock','H2')" class="btn btn-outline rounded-md h-9 px-2 text-xs font-bold">H2</button>
-          <button onclick="WordModule.execCmd('insertUnorderedList')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Lista com marcadores"><i class="fa-solid fa-list-ul"></i></button>
-          <button onclick="WordModule.execCmd('hiliteColor','#fde68a')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Realçar texto"><i class="fa-solid fa-highlighter"></i></button>
-          <button onclick="WordModule.insertTable()" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Inserir tabela"><i class="fa-solid fa-table"></i></button>
-          <button onclick="WordModule.insertTextBox()" class="btn btn-outline rounded-md h-9 px-2 text-xs font-bold">Caixa</button>
-          <button onclick="WordModule.openSearchReplace()" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Localizar e substituir (Ctrl+F)"><i class="fa-solid fa-magnifying-glass"></i></button>
+          <button onclick="WordModule.execCmd('bold')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Negrito (Ctrl+N)" title="Negrito (Ctrl+N)"><i class="fa-solid fa-bold"></i></button>
+          <button onclick="WordModule.execCmd('italic')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Itálico (Ctrl+I)" title="Itálico (Ctrl+I)"><i class="fa-solid fa-italic"></i></button>
+          <button onclick="WordModule.execCmd('underline')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Sublinhado (Ctrl+S)" title="Sublinhado (Ctrl+S)"><i class="fa-solid fa-underline"></i></button>
+          <button onclick="WordModule.execCmd('justifyLeft')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Alinhar à esquerda (Ctrl+Q)" title="Alinhar à Esquerda (Ctrl+Q)"><i class="fa-solid fa-align-left"></i></button>
+          <button onclick="WordModule.execCmd('justifyCenter')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Centralizar (Ctrl+E)" title="Centralizar (Ctrl+E)"><i class="fa-solid fa-align-center"></i></button>
+          <button onclick="WordModule.execCmd('justifyFull')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Justificar (Ctrl+J)" title="Justificar (Ctrl+J)"><i class="fa-solid fa-align-justify"></i></button>
+          <button onclick="WordModule.execCmd('formatBlock','H1')" class="btn btn-outline rounded-md h-9 px-2 text-xs font-bold" aria-label="Título 1" title="Título 1">H1</button>
+          <button onclick="WordModule.execCmd('formatBlock','H2')" class="btn btn-outline rounded-md h-9 px-2 text-xs font-bold" aria-label="Título 2" title="Título 2">H2</button>
+          <button onclick="WordModule.execCmd('insertUnorderedList')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Lista com marcadores" title="Marcadores"><i class="fa-solid fa-list-ul"></i></button>
+          <button onclick="WordModule.execCmd('hiliteColor','#fde68a')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Realçar texto" title="Cor de Realce do Texto"><i class="fa-solid fa-highlighter"></i></button>
+          <button onclick="WordModule.insertTable()" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Inserir tabela" title="Inserir Tabela"><i class="fa-solid fa-table"></i></button>
+          <button onclick="WordModule.insertTextBox()" class="btn btn-outline rounded-md h-9 px-2 text-xs font-bold" aria-label="Inserir caixa de texto" title="Caixa de Texto">Caixa</button>
+          <button onclick="WordModule.openSearchReplace()" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Localizar e substituir (Ctrl+F)" title="Localizar e Substituir (Ctrl+F)"><i class="fa-solid fa-magnifying-glass"></i></button>
         </div>
         <div id="word-editor" contenteditable="true" class="editor-paper p-6 sm:p-8 rounded-lg min-h-[420px] lg:min-h-[520px] focus:outline-none text-sm"></div>
         <div class="flex items-center justify-between pt-2 gap-3 flex-wrap">
@@ -434,9 +434,9 @@
           <div class="flex-1 flex flex-col items-center gap-2">
             <div id="ppt-slide-stage" class="w-full aspect-video rounded-xl p-5 flex flex-col justify-center items-center text-center relative overflow-hidden border-2"></div>
             <div class="flex items-center gap-2">
-              <button onclick="PPTModule.moveSlide(-1)" class="btn btn-outline rounded-md w-8 h-8 text-xs" aria-label="Mover slide para trás"><i class="fa-solid fa-arrow-left"></i></button>
+              <button onclick="PPTModule.moveSlide(-1)" class="btn btn-outline rounded-md w-8 h-8 text-xs" aria-label="Mover slide para trás" title="Mover slide para trás"><i class="fa-solid fa-arrow-left"></i></button>
               <span class="text-[11px] text-ink/50">Mover slide</span>
-              <button onclick="PPTModule.moveSlide(1)" class="btn btn-outline rounded-md w-8 h-8 text-xs" aria-label="Mover slide para frente"><i class="fa-solid fa-arrow-right"></i></button>
+              <button onclick="PPTModule.moveSlide(1)" class="btn btn-outline rounded-md w-8 h-8 text-xs" aria-label="Mover slide para frente" title="Mover slide para frente"><i class="fa-solid fa-arrow-right"></i></button>
             </div>
           </div>
         </div>
@@ -494,7 +494,7 @@
   <div class="sheet rounded-2xl w-full max-w-lg max-h-[80vh] overflow-y-auto p-6">
     <div class="flex items-center justify-between mb-4">
       <h3 class="font-display text-lg font-bold">Glossário de termos</h3>
-      <button onclick="Glossary.close()" class="w-8 h-8 rounded-md btn btn-outline" aria-label="Fechar glossário"><i class="fa-solid fa-xmark"></i></button>
+      <button onclick="Glossary.close()" class="w-8 h-8 rounded-md btn btn-outline" aria-label="Fechar glossário" title="Fechar glossário"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div id="glossary-list" class="space-y-3"></div>
   </div>
@@ -502,9 +502,9 @@
 
 <!-- PPT PRESENTATION OVERLAY -->
 <div id="ppt-present-overlay" class="hidden fixed inset-0 bg-black z-50 flex items-center justify-center">
-  <button onclick="PPTModule.exitPresentation()" aria-label="Sair da apresentação (Esc)" class="absolute top-4 right-4 w-9 h-9 rounded-md bg-white/10 text-white hover:bg-white/20 flex items-center justify-center z-10"><i class="fa-solid fa-xmark"></i></button>
-  <button onclick="PPTModule.navigateSlide(-1)" aria-label="Slide anterior" class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center z-10"><i class="fa-solid fa-chevron-left"></i></button>
-  <button onclick="PPTModule.navigateSlide(1)" aria-label="Próximo slide" class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center z-10"><i class="fa-solid fa-chevron-right"></i></button>
+  <button onclick="PPTModule.exitPresentation()" aria-label="Sair da apresentação (Esc)" title="Sair da apresentação (Esc)" class="absolute top-4 right-4 w-9 h-9 rounded-md bg-white/10 text-white hover:bg-white/20 flex items-center justify-center z-10"><i class="fa-solid fa-xmark"></i></button>
+  <button onclick="PPTModule.navigateSlide(-1)" aria-label="Slide anterior" title="Slide anterior" class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center z-10"><i class="fa-solid fa-chevron-left"></i></button>
+  <button onclick="PPTModule.navigateSlide(1)" aria-label="Próximo slide" title="Próximo slide" class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center z-10"><i class="fa-solid fa-chevron-right"></i></button>
   <div id="ppt-present-stage" onclick="PPTModule.navigateSlide(1)" class="w-[90vw] max-w-4xl aspect-video rounded-xl p-8 flex flex-col justify-center items-center text-center relative overflow-hidden border-2 cursor-pointer"></div>
   <div id="ppt-present-counter" class="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70 text-xs font-mono"></div>
 </div>
