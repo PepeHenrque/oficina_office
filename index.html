@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oficina Office &mdash; Primeiros Passos no Pacote Office</title>
+<script>
+  (function() {
+    try {
+      const saved = localStorage.getItem('office_pro_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved ? saved === 'dark' : prefersDark) document.documentElement.classList.add('dark');
+    } catch(e) {}
+  })();
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: 'rgb(var(--color-ink-rgb) / <alpha-value>)',
+          paper: 'rgb(var(--color-paper-rgb) / <alpha-value>)',
+          paperDim: 'rgb(var(--color-paperdim-rgb) / <alpha-value>)',
+          line: 'rgb(var(--color-line-rgb) / <alpha-value>)',
+          word: { DEFAULT: '#2954E5', soft: '#E7ECFC', dark: '#1B3AA8' },
+          excel: { DEFAULT: '#0F7A52', soft: '#E3F3EA', dark: '#0B5C3D' },
+          ppt: { DEFAULT: '#D2660E', soft: '#FBEADA', dark: '#A3500A' },
+          brand: { DEFAULT: '#4A2FD6', soft: '#EDE9FC', dark: '#37219E' }
+        },
+        fontFamily: {
+          display: ['"Space Grotesk"', 'sans-serif'],
+          sans: ['"Public Sans"', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace']
+        }
+      }
+    }
+  }
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="min-h-screen font-sans text-ink">
+
+<!-- MOBILE TOP BAR -->
+<header class="lg:hidden sticky top-0 z-30 sheet border-x-0 border-t-0">
+  <div class="flex items-center justify-between px-4 py-3">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-md bg-ink flex items-center justify-center"><i class="fa-solid fa-layer-group text-paper text-xs"></i></div>
+      <span class="font-display font-bold text-sm">Oficina Office</span>
+    </div>
+    <div class="flex items-center gap-2 text-xs font-mono">
+      <span id="header-xp-mobile" class="px-2 py-1 rounded bg-brand-soft text-brand-dark font-bold">0 XP</span>
+      <button onclick="ThemeManager.toggle()" class="w-8 h-8 rounded-md btn btn-outline flex items-center justify-center" aria-label="Alternar modo escuro" title="Alternar modo escuro"><i id="theme-icon-mobile" class="fa-solid fa-moon text-xs"></i></button>
+      <button onclick="Glossary.open()" class="w-8 h-8 rounded-md btn btn-outline flex items-center justify-center" aria-label="Abrir glossário de termos" title="Abrir glossário de termos"><i class="fa-solid fa-book text-xs"></i></button>
+    </div>
+  </div>
+  <nav id="mobile-nav" class="flex gap-1.5 overflow-x-auto px-4 pb-3 text-xs"></nav>
+</header>
+
+<div class="lg:flex">
+  <!-- DESKTOP SIDEBAR -->
+  <aside class="hidden lg:flex flex-col w-64 shrink-0 min-h-screen sheet border-y-0 border-l-0 px-5 py-6">
+    <div class="flex items-center gap-2.5 mb-8">
+      <div class="w-9 h-9 rounded-md bg-ink flex items-center justify-center"><i class="fa-solid fa-layer-group text-paper text-sm"></i></div>
+      <div>
+        <p class="font-display font-bold leading-tight">Oficina Office</p>
+        <p class="text-[11px] text-ink/50">Projeto de extensão</p>
+      </div>
+    </div>
+    <nav id="desktop-nav" class="flex flex-col gap-1 text-sm"></nav>
+    <div class="mt-auto pt-6 space-y-3">
+      <button onclick="ThemeManager.toggle()" class="w-full flex items-center justify-between gap-2 px-1">
+        <span class="text-xs font-semibold text-ink/70 flex items-center gap-2"><i id="theme-icon-desktop" class="fa-solid fa-moon w-3.5 text-center"></i> Modo escuro</span>
+        <span class="theme-toggle-track w-8 h-4.5 rounded-full relative shrink-0" style="height:18px;">
+          <span class="theme-toggle-knob w-3 h-3 rounded-full absolute top-[2px] left-[2px]"></span>
+        </span>
+      </button>
+      <button onclick="Glossary.open()" class="w-full btn btn-outline rounded-lg px-3 py-2 text-xs flex items-center gap-2"><i class="fa-solid fa-book"></i> Glossário de termos</button>
+      <div class="sheet-soft rounded-lg p-3">
+        <div class="flex items-center justify-between text-xs mb-1">
+          <span class="font-bold" id="header-level">Nível 1</span>
+          <span class="font-mono font-bold text-brand-dark" id="header-xp">0 XP</span>
+        </div>
+        <div class="h-1.5 bg-line rounded-full overflow-hidden"><div id="level-bar" class="h-full bg-brand w-0"></div></div>
+      </div>
+      <button onclick="AppGamification.resetProgress()" class="w-full text-[11px] text-ink/40 hover:text-ink/70 underline">Reiniciar progresso</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="flex-1 px-4 sm:px-6 lg:px-10 py-6 lg:py-10 max-w-6xl mx-auto w-full space-y-8" id="main-content">
+
+    <!-- ================= DASHBOARD ================= -->
+    <section id="view-dashboard" class="space-y-8">
+      <div class="sheet rounded-2xl p-6 sm:p-10 overflow-hidden relative">
+        <div class="max-w-xl">
+          <p class="text-xs font-bold uppercase tracking-wide text-brand-dark mb-3">Oficina de capacitação &middot; Ensino Médio</p>
+          <h1 class="font-display text-3xl sm:text-4xl font-bold leading-tight mb-4">Aprenda Word, Excel e PowerPoint praticando de verdade, do zero.</h1>
+          <p class="text-sm sm:text-base text-ink/70 leading-relaxed mb-6">Este material foi feito para quem nunca usou o pacote Office &mdash; nem o real, nem uma imitação dele. Aqui você digita fórmulas que calculam de verdade, formata textos que respondem como um editor de verdade, e monta slides que se comportam como slides de verdade. É a mesma lógica que você vai usar na faculdade e no trabalho.</p>
+          <div class="flex flex-wrap gap-3">
+            <button onclick="AppNav.switchTab('modulo0')" class="btn btn-solid rounded-lg px-5 py-2.5 text-sm">Começar pelo início <i class="fa-solid fa-arrow-right ml-1"></i></button>
+            <button onclick="AppNav.switchTab('word')" class="btn btn-outline rounded-lg px-5 py-2.5 text-sm">Já conheço o básico</button>
+          </div>
+        </div>
+        <!-- ribbon mockup, hero visual -->
+        <div class="mt-8 sheet-soft rounded-xl overflow-hidden hidden sm:block">
+          <div class="flex gap-4 px-4 pt-3 text-xs ribbon-tab text-ink/50">
+            <span class="pb-2 border-b-2 border-ink text-ink font-semibold">Página Inicial</span>
+            <span class="pb-2">Inserir</span>
+            <span class="pb-2">Layout</span>
+            <span class="pb-2">Fórmulas</span>
+            <span class="pb-2">Revisão</span>
+          </div>
+          <div class="flex items-center gap-4 px-4 py-3 border-t border-line text-ink/70 text-sm">
+            <i class="fa-solid fa-bold"></i><i class="fa-solid fa-italic"></i><i class="fa-solid fa-underline"></i>
+            <span class="w-px h-5 bg-line"></span>
+            <i class="fa-solid fa-align-left"></i><i class="fa-solid fa-align-center"></i><i class="fa-solid fa-align-justify"></i>
+            <span class="w-px h-5 bg-line"></span>
+            <i class="fa-solid fa-list-ul"></i><i class="fa-solid fa-table"></i>
+            <span class="ml-auto text-xs text-ink/40 hidden md:inline">isto é uma simulação &mdash; a faixa de opções real está em cada laboratório</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <button onclick="AppNav.switchTab('modulo0')" class="sheet-soft rounded-xl p-5 text-left hover:bg-paperDim transition">
+          <div class="w-9 h-9 rounded-md bg-brand-soft text-brand-dark flex items-center justify-center mb-3"><i class="fa-solid fa-seedling"></i></div>
+          <p class="font-display font-bold mb-1">Primeiros Passos</p>
+          <p class="text-xs text-ink/60 mb-2" id="m0-status">Comece por aqui se nunca usou o Office</p>
+          <div class="h-1.5 bg-line rounded-full overflow-hidden"><div id="m0-bar" class="h-full bg-brand w-0"></div></div>
+        </button>
+        <div class="sheet-soft rounded-xl p-5">
+          <div class="w-9 h-9 rounded-md bg-paperDim text-ink flex items-center justify-center mb-3"><i class="fa-solid fa-trophy text-amber-600"></i></div>
+          <p class="font-display font-bold mb-1">Suas conquistas</p>
+          <p class="text-xs text-ink/60"><span id="total-badges-unlocked">0 / 9</span> emblemas desbloqueados</p>
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-3 gap-4">
+        <button onclick="AppNav.switchTab('word')" class="sheet rounded-xl p-5 text-left hover:-translate-y-0.5 transition">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-md bg-word-soft text-word-dark flex items-center justify-center"><i class="fa-solid fa-file-word text-lg"></i></div>
+            <span id="badge-count-word" class="text-[11px] font-bold px-2 py-1 rounded bg-word-soft text-word-dark">0/11</span>
+          </div>
+          <p class="font-display font-bold">Microsoft Word</p>
+          <p class="text-xs text-ink/60 mb-3">Documentos, formatação e estrutura de texto</p>
+          <div class="h-1.5 bg-line rounded-full overflow-hidden"><div id="progress-word-bar" class="h-full bg-word w-0"></div></div>
+        </button>
+        <button onclick="AppNav.switchTab('excel')" class="sheet rounded-xl p-5 text-left hover:-translate-y-0.5 transition">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-md bg-excel-soft text-excel-dark flex items-center justify-center"><i class="fa-solid fa-file-excel text-lg"></i></div>
+            <span id="badge-count-excel" class="text-[11px] font-bold px-2 py-1 rounded bg-excel-soft text-excel-dark">0/11</span>
+          </div>
+          <p class="font-display font-bold">Microsoft Excel</p>
+          <p class="text-xs text-ink/60 mb-3">Planilhas, fórmulas que calculam de verdade</p>
+          <div class="h-1.5 bg-line rounded-full overflow-hidden"><div id="progress-excel-bar" class="h-full bg-excel w-0"></div></div>
+        </button>
+        <button onclick="AppNav.switchTab('ppt')" class="sheet rounded-xl p-5 text-left hover:-translate-y-0.5 transition">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-md bg-ppt-soft text-ppt-dark flex items-center justify-center"><i class="fa-solid fa-file-powerpoint text-lg"></i></div>
+            <span id="badge-count-ppt" class="text-[11px] font-bold px-2 py-1 rounded bg-ppt-soft text-ppt-dark">0/11</span>
+          </div>
+          <p class="font-display font-bold">Microsoft PowerPoint</p>
+          <p class="text-xs text-ink/60 mb-3">Slides, narrativa visual e apresentação</p>
+          <div class="h-1.5 bg-line rounded-full overflow-hidden"><div id="progress-ppt-bar" class="h-full bg-ppt w-0"></div></div>
+        </button>
+      </div>
+
+      <div class="sheet rounded-2xl p-6">
+        <p class="font-display font-bold mb-4">Mural de emblemas</p>
+        <div id="badges-grid" class="grid grid-cols-3 sm:grid-cols-5 gap-3"></div>
+      </div>
+    </section>
+
+    <!-- ================= MODULO 0 ================= -->
+    <section id="view-modulo0" class="hidden space-y-6">
+      <div class="sheet rounded-2xl p-6 sm:p-8">
+        <p class="text-xs font-bold uppercase tracking-wide text-brand-dark mb-2">Primeiros Passos</p>
+        <h2 class="font-display text-2xl font-bold mb-2">Antes de tocar num laboratório</h2>
+        <p class="text-sm text-ink/70 leading-relaxed">Se você nunca abriu o Word, o Excel ou o PowerPoint, comece aqui. São 4 minutos de leitura que vão fazer o resto da oficina fazer muito mais sentido.</p>
+      </div>
+
+      <div class="sheet rounded-2xl p-6 sm:p-8 space-y-4">
+        <h3 class="font-display font-bold flex items-center gap-2"><i class="fa-solid fa-ribbon text-brand-dark"></i> O que é a "Faixa de Opções"?</h3>
+        <p class="text-sm text-ink/70 leading-relaxed">É a barra de botões no topo de qualquer programa do Office &mdash; a fileira de abas como <strong>Página Inicial</strong>, <strong>Inserir</strong>, <strong>Design</strong>. Cada aba abre um grupo de ferramentas diferentes. Pense nela como o painel de um carro: cada botão tem uma função fixa, e depois de usar algumas vezes você para de precisar procurar.</p>
+        <div class="sheet-soft rounded-xl overflow-hidden">
+          <div class="flex gap-4 px-4 pt-3 text-xs ribbon-tab text-ink/50">
+            <span class="pb-2 border-b-2 border-word text-word font-semibold">Página Inicial</span>
+            <span class="pb-2">Inserir</span>
+            <span class="pb-2">Layout</span>
+            <span class="pb-2">Revisão</span>
+          </div>
+          <div class="flex items-center gap-4 px-4 py-3 border-t border-line text-ink/70">
+            <span class="text-xs text-ink/40">Grupo "Fonte":</span>
+            <i class="fa-solid fa-bold"></i><i class="fa-solid fa-italic"></i>
+            <span class="w-px h-5 bg-line"></span>
+            <span class="text-xs text-ink/40">Grupo "Parágrafo":</span>
+            <i class="fa-solid fa-align-left"></i><i class="fa-solid fa-align-justify"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="sheet rounded-2xl p-6 sm:p-8 space-y-4">
+        <h3 class="font-display font-bold flex items-center gap-2"><i class="fa-solid fa-table-cells text-excel-dark"></i> O que é uma célula?</h3>
+        <p class="text-sm text-ink/70 leading-relaxed">No Excel, tudo mora em uma grade. Cada quadradinho é uma <strong>célula</strong>, identificada por uma letra (a coluna) e um número (a linha). A célula <code class="font-mono bg-paperDim px-1 rounded">B2</code> é a que fica na coluna B, linha 2. Isso importa porque toda fórmula se refere a células, não a "o número ali do lado".</p>
+        <div class="flex justify-center">
+          <table class="text-xs font-mono border-collapse">
+            <tr><td class="w-8 h-8"></td><td class="w-16 h-8 border border-line text-center bg-paperDim font-bold">A</td><td class="w-16 h-8 border border-line text-center bg-paperDim font-bold">B</td></tr>
+            <tr><td class="w-8 h-8 border border-line text-center bg-paperDim font-bold">1</td><td class="border border-line text-center">Item</td><td class="border border-line text-center">Valor</td></tr>
+            <tr><td class="w-8 h-8 border border-line text-center bg-paperDim font-bold">2</td><td class="border border-line text-center">Caneta</td><td class="border border-line text-center bg-excel-soft text-excel-dark font-bold">B2</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="sheet rounded-2xl p-6 sm:p-8 space-y-4">
+        <h3 class="font-display font-bold flex items-center gap-2"><i class="fa-solid fa-function text-excel-dark"></i> O que é uma fórmula?</h3>
+        <p class="text-sm text-ink/70 leading-relaxed">É uma instrução que começa com <code class="font-mono bg-paperDim px-1 rounded">=</code> e faz o programa calcular algo por você. <code class="font-mono bg-paperDim px-1 rounded">=SOMA(B2:B4)</code> significa "some tudo que está entre a célula B2 e a célula B4". No laboratório de Excel, essas fórmulas calculam <strong>de verdade</strong> &mdash; o resultado aparece na célula assim que você confirma.</p>
+      </div>
+
+      <div class="sheet rounded-2xl p-6 sm:p-8">
+        <h3 class="font-display font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-book text-brand-dark"></i> Glossário rápido</h3>
+        <div id="modulo0-glossary" class="grid sm:grid-cols-2 gap-3"></div>
+      </div>
+
+      <div class="sheet rounded-2xl p-6 flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <p class="font-display font-bold">Pronto para praticar?</p>
+          <p class="text-xs text-ink/60">Marque como concluído e siga para o primeiro laboratório.</p>
+        </div>
+        <button onclick="Modulo0.complete()" id="m0-complete-btn" class="btn btn-solid rounded-lg px-5 py-2.5 text-sm">Marcar como concluído <i class="fa-solid fa-check ml-1"></i></button>
+      </div>
+    </section>
+
+    <!-- ================= WORD ================= -->
+    <section id="view-word" class="hidden space-y-6">
+      <div class="sheet rounded-2xl p-5 sm:p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-md bg-word-soft text-word-dark flex items-center justify-center"><i class="fa-solid fa-file-word"></i></div>
+          <div>
+            <h2 class="font-display text-xl font-bold">Laboratório de Word</h2>
+            <p class="text-xs text-ink/60">Edite o documento à direita como faria no Word de verdade</p>
+          </div>
+        </div>
+        <div id="word-question-tabs" class="flex flex-wrap gap-1.5"></div>
+      </div>
+
+      <div class="sheet rounded-2xl p-5 sm:p-6">
+        <div class="grid lg:grid-cols-3 gap-5">
+          <div class="lg:col-span-2 space-y-3">
+            <div class="flex items-center justify-between">
+              <span id="word-task-number" class="text-[11px] font-bold uppercase tracking-wide text-word bg-word-soft px-2.5 py-1 rounded">Exercício</span>
+              <span id="word-xp-reward" class="text-[11px] font-bold text-amber-700 bg-amber-100 px-2.5 py-1 rounded">+0 XP</span>
+            </div>
+            <h3 id="word-task-title" class="font-display text-lg font-bold"></h3>
+            <div id="word-task-explanation" class="text-sm text-ink/70 leading-relaxed space-y-2"></div>
+
+            <button onclick="WordModule.toggleHint()" class="text-xs font-bold text-brand-dark flex items-center gap-1.5"><i class="fa-solid fa-lightbulb"></i> <span id="word-hint-toggle-label">Ver dica</span></button>
+            <div id="word-hint-box" class="hidden sheet-soft rounded-lg p-3 text-xs text-ink/70"></div>
+          </div>
+
+          <div class="space-y-3">
+            <div class="sheet-soft rounded-lg p-3.5 border-l-4 border-l-word">
+              <p class="text-[11px] font-bold uppercase tracking-wide text-word mb-1"><i class="fa-solid fa-desktop"></i> No Word de verdade</p>
+              <p id="word-office-real-text" class="text-xs text-ink/70 leading-relaxed"></p>
+            </div>
+
+            <div>
+              <p class="text-[11px] font-bold uppercase tracking-wide text-ink/50 mb-2">Checklist da missão</p>
+              <div id="word-checklist" class="space-y-1.5"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sheet rounded-2xl p-5 sm:p-6 space-y-3">
+        <div class="flex items-center justify-between pb-1">
+          <p class="text-[11px] font-bold uppercase tracking-wide text-ink/50"><i class="fa-solid fa-pen-to-square mr-1"></i> Atividade</p>
+          <p class="text-[11px] text-ink/40 hidden sm:block">Atalhos: <kbd class="font-mono">Ctrl+N</kbd> negrito &middot; <kbd class="font-mono">Ctrl+I</kbd> itálico &middot; <kbd class="font-mono">Ctrl+J</kbd> justificar &middot; <kbd class="font-mono">Ctrl+F</kbd> localizar</p>
+        </div>
+        <div class="flex flex-wrap gap-1.5 pb-3 border-b border-line">
+          <button onclick="WordModule.execCmd('bold')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Negrito (Ctrl+N)" title="Negrito (Ctrl+N)"><i class="fa-solid fa-bold"></i></button>
+          <button onclick="WordModule.execCmd('italic')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Itálico (Ctrl+I)" title="Itálico (Ctrl+I)"><i class="fa-solid fa-italic"></i></button>
+          <button onclick="WordModule.execCmd('underline')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Sublinhado (Ctrl+S)" title="Sublinhado (Ctrl+S)"><i class="fa-solid fa-underline"></i></button>
+          <button onclick="WordModule.execCmd('justifyLeft')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Alinhar à esquerda (Ctrl+Q)" title="Alinhar à Esquerda (Ctrl+Q)"><i class="fa-solid fa-align-left"></i></button>
+          <button onclick="WordModule.execCmd('justifyCenter')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Centralizar (Ctrl+E)" title="Centralizar (Ctrl+E)"><i class="fa-solid fa-align-center"></i></button>
+          <button onclick="WordModule.execCmd('justifyFull')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Justificar (Ctrl+J)" title="Justificar (Ctrl+J)"><i class="fa-solid fa-align-justify"></i></button>
+          <button onclick="WordModule.execCmd('formatBlock','H1')" class="btn btn-outline rounded-md h-9 px-2 text-xs font-bold" aria-label="Título 1" title="Título 1">H1</button>
+          <button onclick="WordModule.execCmd('formatBlock','H2')" class="btn btn-outline rounded-md h-9 px-2 text-xs font-bold" aria-label="Título 2" title="Título 2">H2</button>
+          <button onclick="WordModule.execCmd('insertUnorderedList')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Lista com marcadores" title="Marcadores"><i class="fa-solid fa-list-ul"></i></button>
+          <button onclick="WordModule.execCmd('hiliteColor','#fde68a')" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Realçar texto" title="Cor de Realce do Texto"><i class="fa-solid fa-highlighter"></i></button>
+          <button onclick="WordModule.insertTable()" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Inserir tabela" title="Inserir Tabela"><i class="fa-solid fa-table"></i></button>
+          <button onclick="WordModule.insertTextBox()" class="btn btn-outline rounded-md h-9 px-2 text-xs font-bold" aria-label="Inserir caixa de texto" title="Caixa de Texto">Caixa</button>
+          <button onclick="WordModule.openSearchReplace()" class="btn btn-outline rounded-md w-9 h-9 text-sm" aria-label="Localizar e substituir (Ctrl+F)" title="Localizar e Substituir (Ctrl+F)"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        <div id="word-editor" contenteditable="true" class="editor-paper p-6 sm:p-8 rounded-lg min-h-[420px] lg:min-h-[520px] focus:outline-none text-sm"></div>
+        <div class="flex items-center justify-between pt-2 gap-3 flex-wrap">
+          <div id="word-feedback" class="text-xs font-semibold text-ink/60"></div>
+          <div class="flex items-center gap-2 ml-auto">
+            <button id="word-next-btn" onclick="WordModule.nextTask()" class="hidden btn rounded-lg px-5 py-2 text-sm bg-word text-white">Próxima atividade <i class="fa-solid fa-arrow-right ml-1"></i></button>
+            <button onclick="WordModule.validateCurrentTask()" class="btn btn-solid rounded-lg px-5 py-2 text-sm">Validar <i class="fa-solid fa-check ml-1"></i></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= EXCEL ================= -->
+    <section id="view-excel" class="hidden space-y-6">
+      <div class="sheet rounded-2xl p-5 sm:p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-md bg-excel-soft text-excel-dark flex items-center justify-center"><i class="fa-solid fa-file-excel"></i></div>
+          <div>
+            <h2 class="font-display text-xl font-bold">Laboratório de Excel</h2>
+            <p class="text-xs text-ink/60">As fórmulas aqui calculam de verdade &mdash; teste à vontade</p>
+          </div>
+        </div>
+        <div id="excel-question-tabs" class="flex flex-wrap gap-1.5"></div>
+      </div>
+
+      <div class="sheet rounded-2xl p-5 sm:p-6">
+        <div class="grid lg:grid-cols-3 gap-5">
+          <div class="lg:col-span-2 space-y-3">
+            <div class="flex items-center justify-between">
+              <span id="excel-task-number" class="text-[11px] font-bold uppercase tracking-wide text-excel-dark bg-excel-soft px-2.5 py-1 rounded">Exercício</span>
+              <span id="excel-xp-reward" class="text-[11px] font-bold text-amber-700 bg-amber-100 px-2.5 py-1 rounded">+0 XP</span>
+            </div>
+            <h3 id="excel-task-title" class="font-display text-lg font-bold"></h3>
+            <div id="excel-task-explanation" class="text-sm text-ink/70 leading-relaxed space-y-2"></div>
+
+            <button onclick="ExcelModule.toggleHint()" class="text-xs font-bold text-brand-dark flex items-center gap-1.5"><i class="fa-solid fa-lightbulb"></i> <span id="excel-hint-toggle-label">Ver dica</span></button>
+            <div id="excel-hint-box" class="hidden sheet-soft rounded-lg p-3 text-xs text-ink/70"></div>
+          </div>
+
+          <div class="space-y-3">
+            <div class="sheet-soft rounded-lg p-3.5 border-l-4 border-l-excel">
+              <p class="text-[11px] font-bold uppercase tracking-wide text-excel-dark mb-1"><i class="fa-solid fa-desktop"></i> No Excel de verdade</p>
+              <p id="excel-office-real-text" class="text-xs text-ink/70 leading-relaxed"></p>
+            </div>
+            <div>
+              <p class="text-[11px] font-bold uppercase tracking-wide text-ink/50 mb-2">Checklist da missão</p>
+              <div id="excel-checklist" class="space-y-1.5"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sheet rounded-2xl p-5 sm:p-6 space-y-3">
+        <p class="text-[11px] font-bold uppercase tracking-wide text-ink/50"><i class="fa-solid fa-table-cells mr-1"></i> Atividade</p>
+        <div class="flex items-center gap-2 pb-3 border-b border-line">
+          <div id="excel-active-cell" class="px-3 py-1.5 bg-ink text-paper font-bold text-xs rounded font-mono">A1</div>
+          <span class="text-ink/30 text-xs">fx</span>
+          <input type="text" id="excel-formula-bar" placeholder="Digite um valor ou fórmula, ex: =SOMA(B2:B4)" class="flex-1 sheet-soft border-line px-3 py-1.5 rounded text-xs font-mono focus:outline-none focus:border-excel">
+        </div>
+        <div class="overflow-x-auto rounded-lg border border-line">
+          <table id="excel-grid" class="w-full border-collapse text-left min-w-[420px]"></table>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 pt-1">
+          <button onclick="ExcelModule.sortAZ()" class="btn btn-outline rounded-md px-3 py-1.5 text-xs">Classificar A-Z</button>
+          <button onclick="ExcelModule.toggleConditionalFormat()" class="btn btn-outline rounded-md px-3 py-1.5 text-xs">Regra Condicional</button>
+          <div id="excel-sheet-tabs" class="flex items-center gap-1.5 ml-auto text-xs"></div>
+        </div>
+        <div class="flex items-center justify-between pt-2 gap-3 flex-wrap">
+          <div id="excel-feedback" class="text-xs font-semibold text-ink/60"></div>
+          <div class="flex items-center gap-2 ml-auto">
+            <button id="excel-next-btn" onclick="ExcelModule.nextTask()" class="hidden btn rounded-lg px-5 py-2 text-sm bg-excel text-white">Próxima atividade <i class="fa-solid fa-arrow-right ml-1"></i></button>
+            <button onclick="ExcelModule.validateCurrentTask()" class="btn btn-solid rounded-lg px-5 py-2 text-sm">Validar <i class="fa-solid fa-check ml-1"></i></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= POWERPOINT ================= -->
+    <section id="view-ppt" class="hidden space-y-6">
+      <div class="sheet rounded-2xl p-5 sm:p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-md bg-ppt-soft text-ppt-dark flex items-center justify-center"><i class="fa-solid fa-file-powerpoint"></i></div>
+          <div>
+            <h2 class="font-display text-xl font-bold">Laboratório de PowerPoint</h2>
+            <p class="text-xs text-ink/60">Monte, ordene e apresente slides de verdade</p>
+          </div>
+        </div>
+        <div id="ppt-question-tabs" class="flex flex-wrap gap-1.5"></div>
+      </div>
+
+      <div class="sheet rounded-2xl p-5 sm:p-6">
+        <div class="grid lg:grid-cols-3 gap-5">
+          <div class="lg:col-span-2 space-y-3">
+            <div class="flex items-center justify-between">
+              <span id="ppt-task-number" class="text-[11px] font-bold uppercase tracking-wide text-ppt-dark bg-ppt-soft px-2.5 py-1 rounded">Exercício</span>
+              <span id="ppt-xp-reward" class="text-[11px] font-bold text-amber-700 bg-amber-100 px-2.5 py-1 rounded">+0 XP</span>
+            </div>
+            <h3 id="ppt-task-title" class="font-display text-lg font-bold"></h3>
+            <div id="ppt-task-explanation" class="text-sm text-ink/70 leading-relaxed space-y-2"></div>
+
+            <button onclick="PPTModule.toggleHint()" class="text-xs font-bold text-brand-dark flex items-center gap-1.5"><i class="fa-solid fa-lightbulb"></i> <span id="ppt-hint-toggle-label">Ver dica</span></button>
+            <div id="ppt-hint-box" class="hidden sheet-soft rounded-lg p-3 text-xs text-ink/70"></div>
+          </div>
+
+          <div class="space-y-3">
+            <div class="sheet-soft rounded-lg p-3.5 border-l-4 border-l-ppt">
+              <p class="text-[11px] font-bold uppercase tracking-wide text-ppt-dark mb-1"><i class="fa-solid fa-desktop"></i> No PowerPoint de verdade</p>
+              <p id="ppt-office-real-text" class="text-xs text-ink/70 leading-relaxed"></p>
+            </div>
+            <div>
+              <p class="text-[11px] font-bold uppercase tracking-wide text-ink/50 mb-2">Checklist da missão</p>
+              <div id="ppt-checklist" class="space-y-1.5"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sheet rounded-2xl p-5 sm:p-6 space-y-3">
+        <div class="flex items-center justify-between pb-1">
+          <p class="text-[11px] font-bold uppercase tracking-wide text-ink/50"><i class="fa-solid fa-display mr-1"></i> Atividade</p>
+          <p class="text-[11px] text-ink/40 hidden sm:block">Atalho: <kbd class="font-mono">Ctrl+M</kbd> novo slide</p>
+        </div>
+        <div class="flex flex-wrap gap-1.5 pb-3 border-b border-line text-xs">
+          <button onclick="PPTModule.addSlide()" class="btn btn-outline rounded-md px-3 py-1.5"><i class="fa-solid fa-plus"></i> Slide</button>
+          <button onclick="PPTModule.addCard()" class="btn btn-outline rounded-md px-3 py-1.5">+ Cartão Visual</button>
+          <button onclick="PPTModule.addTable()" class="btn btn-outline rounded-md px-3 py-1.5">+ Tabela</button>
+          <button onclick="PPTModule.addList()" class="btn btn-outline rounded-md px-3 py-1.5">+ Lista</button>
+          <button onclick="PPTModule.setTheme('blue')" class="btn btn-outline rounded-md px-3 py-1.5">Tema Azul</button>
+          <button onclick="PPTModule.setTheme('dark')" class="btn btn-outline rounded-md px-3 py-1.5">Tema Padrão</button>
+          <select onchange="PPTModule.setTransition(this.value)" class="btn btn-outline rounded-md px-2 py-1.5">
+            <option value="none" style="background:#FFFEFB;color:#1C1B22;">Transição: Nenhuma</option>
+            <option value="fade" style="background:#FFFEFB;color:#1C1B22;">Transição: Esmaecer</option>
+            <option value="slide" style="background:#FFFEFB;color:#1C1B22;">Transição: Deslizar</option>
+          </select>
+          <button onclick="PPTModule.startPresentation()" class="btn btn-outline rounded-md px-3 py-1.5 ml-auto"><i class="fa-solid fa-play"></i> Apresentar</button>
+        </div>
+        <div class="flex gap-3">
+          <div id="ppt-slide-thumbnails" class="w-24 shrink-0 space-y-2"></div>
+          <div class="flex-1 flex flex-col items-center gap-2">
+            <div id="ppt-slide-stage" class="w-full aspect-video rounded-xl p-5 flex flex-col justify-center items-center text-center relative overflow-hidden border-2"></div>
+            <div class="flex items-center gap-2">
+              <button onclick="PPTModule.moveSlide(-1)" class="btn btn-outline rounded-md w-8 h-8 text-xs" aria-label="Mover slide para trás" title="Mover slide para trás"><i class="fa-solid fa-arrow-left"></i></button>
+              <span class="text-[11px] text-ink/50">Mover slide</span>
+              <button onclick="PPTModule.moveSlide(1)" class="btn btn-outline rounded-md w-8 h-8 text-xs" aria-label="Mover slide para frente" title="Mover slide para frente"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-between pt-2 gap-3 flex-wrap">
+          <div id="ppt-feedback" class="text-xs font-semibold text-ink/60"></div>
+          <div class="flex items-center gap-2 ml-auto">
+            <button id="ppt-next-btn" onclick="PPTModule.nextTask()" class="hidden btn rounded-lg px-5 py-2 text-sm bg-ppt text-white">Próxima atividade <i class="fa-solid fa-arrow-right ml-1"></i></button>
+            <button onclick="PPTModule.validateCurrentTask()" class="btn btn-solid rounded-lg px-5 py-2 text-sm">Validar <i class="fa-solid fa-check ml-1"></i></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOWNLOADS -->
+    <section id="view-downloads" class="hidden space-y-6">
+      <div>
+        <h2 class="font-display text-2xl font-bold">Baixe os arquivos reais</h2>
+        <p class="text-sm text-ink/60 mt-1 max-w-2xl">Depois de praticar aqui na simulação, é hora de sentir o programa de verdade. Cada arquivo abaixo é um caderno de atividades para abrir no Word, Excel ou PowerPoint de verdade — com instruções, área para praticar e (no Excel) o resultado esperado ao lado de cada exercício, para você conferir sozinho.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="sheet rounded-2xl p-6 flex flex-col">
+          <div class="w-12 h-12 rounded-xl bg-word-soft text-word flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-file-word"></i></div>
+          <h3 class="font-display text-lg font-bold mb-1">Word</h3>
+          <p class="text-xs text-ink/60 mb-4 flex-1">10 atividades + desafio final: negrito, alinhamento, títulos, listas, localizar e substituir, tabela, cabeçalho e mais — direto num documento de verdade.</p>
+          <a href="files/Caderno_de_Atividades_Word.docx" download class="btn btn-solid rounded-lg px-4 py-2.5 text-sm text-center"><i class="fa-solid fa-download mr-1.5"></i> Baixar .docx</a>
+        </div>
+
+        <div class="sheet rounded-2xl p-6 flex flex-col">
+          <div class="w-12 h-12 rounded-xl bg-excel-soft text-excel-dark flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-file-excel"></i></div>
+          <h3 class="font-display text-lg font-bold mb-1">Excel</h3>
+          <p class="text-xs text-ink/60 mb-4 flex-1">10 atividades + desafio final: cada fórmula (SOMA, MÉDIA, MÁXIMO, SE, CONT.SE...) aparece 4 vezes com dados diferentes, e o resultado esperado fica ao lado para você conferir na hora.</p>
+          <a href="files/Caderno_de_Atividades_Excel.xlsx" download class="btn btn-solid rounded-lg px-4 py-2.5 text-sm text-center"><i class="fa-solid fa-download mr-1.5"></i> Baixar .xlsx</a>
+        </div>
+
+        <div class="sheet rounded-2xl p-6 flex flex-col">
+          <div class="w-12 h-12 rounded-xl bg-ppt-soft text-ppt-dark flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-file-powerpoint"></i></div>
+          <h3 class="font-display text-lg font-bold mb-1">PowerPoint</h3>
+          <p class="text-xs text-ink/60 mb-4 flex-1">10 atividades + desafio final: título, novo slide, formas, ícones, temas, animação, transição, tabela, lista e o desafio de reordenar e apresentar de verdade (F5).</p>
+          <a href="files/Caderno_de_Atividades_PowerPoint.pptx" download class="btn btn-solid rounded-lg px-4 py-2.5 text-sm text-center"><i class="fa-solid fa-download mr-1.5"></i> Baixar .pptx</a>
+        </div>
+      </div>
+
+      <div class="sheet-soft rounded-xl p-4 flex items-start gap-3">
+        <i class="fa-solid fa-circle-info text-brand-dark mt-0.5"></i>
+        <p class="text-xs text-ink/60">Esses arquivos abrem no Word, Excel e PowerPoint de verdade (aplicativo instalado ou versão Online/OneDrive). Eles não têm nenhuma correção automática — a própria atividade já mostra a resposta esperada, para você conferir com os próprios olhos.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- GLOSSARY MODAL -->
+<div id="glossary-modal" class="hidden fixed inset-0 bg-ink/40 z-40 flex items-center justify-center p-4">
+  <div class="sheet rounded-2xl w-full max-w-lg max-h-[80vh] overflow-y-auto p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="font-display text-lg font-bold">Glossário de termos</h3>
+      <button onclick="Glossary.close()" class="w-8 h-8 rounded-md btn btn-outline" aria-label="Fechar glossário" title="Fechar glossário"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="glossary-list" class="space-y-3"></div>
+  </div>
+</div>
+
+<!-- PPT PRESENTATION OVERLAY -->
+<div id="ppt-present-overlay" class="hidden fixed inset-0 bg-black z-50 flex items-center justify-center">
+  <button onclick="PPTModule.exitPresentation()" aria-label="Sair da apresentação (Esc)" title="Sair da apresentação (Esc)" class="absolute top-4 right-4 w-9 h-9 rounded-md bg-white/10 text-white hover:bg-white/20 flex items-center justify-center z-10"><i class="fa-solid fa-xmark"></i></button>
+  <button onclick="PPTModule.navigateSlide(-1)" aria-label="Slide anterior" title="Slide anterior" class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center z-10"><i class="fa-solid fa-chevron-left"></i></button>
+  <button onclick="PPTModule.navigateSlide(1)" aria-label="Próximo slide" title="Próximo slide" class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center z-10"><i class="fa-solid fa-chevron-right"></i></button>
+  <div id="ppt-present-stage" onclick="PPTModule.navigateSlide(1)" class="w-[90vw] max-w-4xl aspect-video rounded-xl p-8 flex flex-col justify-center items-center text-center relative overflow-hidden border-2 cursor-pointer"></div>
+  <div id="ppt-present-counter" class="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70 text-xs font-mono"></div>
+</div>
+
+<footer class="text-center text-ink/40 text-xs py-8">
+  <p>Oficina Office &mdash; material de apoio para projeto de extensão. Não afiliado à Microsoft.</p>
+</footer>
+
+<script src="js/data-state.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/gamification.js"></script>
+<script src="js/word.js"></script>
+<script src="js/formula-engine.js"></script>
+<script src="js/excel.js"></script>
+<script src="js/ppt.js"></script>
+<script src="js/shortcuts.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
